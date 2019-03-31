@@ -1,0 +1,43 @@
+body{
+  padding-top: 50px;
+}
+#navbar-gap{
+  margin-top: -4%;
+}
+/* .row.thumbnail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} */
+
+.cart-thumbnail .thumb-img {
+  width: 100px;
+  height: 10%;
+}
+.product-image{
+  height: 420px;
+  display: grid;
+}
+.product-image img {
+  height:300px;
+}
+
+.product-image  .caption {
+  position: absolute;
+  bottom: 0;
+  /* left: 0; */
+}
+.pice-details {
+  padding: 15px;
+}
+
+.row-cart{
+  display: flex;
+  align-items: center;
+}
+.product-container{
+  /* border: 1px solid black; */
+  margin-top:20px;
+
+  
+}

@@ -1,0 +1,137 @@
+
+<footer>
+  <p>&copy; 2019 Ecommerce chatbot, Inc.</p>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script>
+    var div = document.createElement('div');
+    div.className = 'fb-customerchat';
+    div.setAttribute('page_id', '423501751377034');
+    div.setAttribute('ref', '');
+    document.body.appendChild(div);
+    window.fbMessengerPlugins = window.fbMessengerPlugins || {
+      init: function () {
+        FB.init({
+          appId            : '1678638095724206',
+          autoLogAppEvents : true,
+          xfbml            : true,
+          version          : 'v3.0'
+        });
+      }, callable: []
+    };
+    window.fbAsyncInit = window.fbAsyncInit || function () {
+      window.fbMessengerPlugins.callable.forEach(function (item) { item(); });
+      window.fbMessengerPlugins.init();
+    };
+    setTimeout(function () {
+      (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) { return; }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk/xfbml.customerchat.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+    }, 0);
+  </script>
+  <script type="text/javascript">
+    
+    $(document).ready(function(){
+      if($(location).attr("href").indexOf('checkout') > -1){
+        var items = [], checkoutData = [];
+        for (var key in window.localStorage){
+          items.push(key);
+        }
+        items = items.slice(0, items.length - 6);
+        var generateHTML = '<div class="col-md-8"><div class="title">';
+        generateHTML += '<h4 id="cart-item">My Cart (' + items.length + ')</h4>';
+        generateHTML += '</div>';
+        var amountValues = [];
+        items.forEach(item => {
+          var tempData = window.localStorage.getItem(item).split("|");
+          amountValues.push(parseInt(tempData[4].replace('$', '')));
+          generateHTML += '<div class="row thumbnail cart-thumbnail" id="div-' + item + '">';
+          generateHTML += '<div class="col-md-6">';
+          generateHTML += '<img class="thumb-img" src="' + tempData[3] + '" />';
+          generateHTML += '</div>';
+          generateHTML += '<div class="col-md-6 caption">';
+          generateHTML += '<h3>' + tempData[1] + '</h3>';
+          generateHTML += '<p>';
+          generateHTML += tempData[2];
+          generateHTML += '</p>';
+          generateHTML += '<p>';
+          generateHTML += tempData[4];
+          generateHTML += '</p></div>';
+          generateHTML += '<div class="col-md-3"><p> <button class="btn btn-primary remove-btn" type="button" id="'+ item + '">Remove</button></div>'
+          generateHTML += '</div>';
+        });
+        generateHTML += "</div>";
+        generateHTML += '<div class="col-md-4"><div class="pice-details"><h2>Price Details</h2>';
+        generateHTML += '<div class="row"><div class="col-md-6"><p>Delivery Charges</p></div>';
+        generateHTML += '<div class="col-md-6"><p id="del-charges">' + (amountValues.length > 0 ? 6.99 : 0) +'$</p></div></div>';
+        generateHTML += '<div class="row"><div class="col-md-6"><p>Amount Payable</p></div>';
+        generateHTML += '<div class="col-md-6"><p id="total-amount">0$</p></div></div>';
+        generateHTML += '</div></div>';
+
+        generateHTML += '<div class="row">';
+        generateHTML += '<div class="col-md-6">';
+        generateHTML += '<button type="button" class="btn btn-light" id="cont-shop">';
+        generateHTML += '< CONTINUE SHOPPING</button> </div> <div class="col-md-6">';
+        generateHTML += '<button type="button" disabled class="btn btn-danger">PLACE ORDER</button>';
+        generateHTML += '</div></div>';
+        $('#row-checkout').html(generateHTML);
+        $('#total-amount').text(amountValues.length > 0 ? amountValues.reduce( (item, currValue) => item + currValue) + 6.99 + '$' : '0$');
+      }
+      $('.btn-product').click(function(){ 
+        var items = [];
+        for (var key in window.localStorage){
+          items.push(key);
+        }
+        var lastValue = '';
+        if(items.length - 6 > 0){
+          items = items.slice(0, items.length - 6);
+          lastValue = items[items.length - 1];
+          lastValue = lastValue.replace("checkout", "");
+        }
+        lastValue = lastValue === '' ? 0 : parseInt(lastValue) + 1;
+        window.localStorage.setItem('checkout' + lastValue, this.id);
+      });
+      $('.add-to-cart').click(function(){ 
+        var items = [];
+        for (var key in window.localStorage){
+          items.push(key);
+        }
+        var lastValue = '';
+        if(items.length - 6 > 0){
+          items = items.slice(0, items.length - 6);
+          lastValue = items[items.length - 1];
+          lastValue = lastValue.replace("checkout", "");
+        }
+        lastValue = lastValue === '' ? 0 : parseInt(lastValue) + 1;
+        window.localStorage.setItem('checkout' + lastValue, this.id);
+      });
+      $('.remove-btn').click(function(){
+        var tempData = window.localStorage.getItem(this.id).split("|");
+        window.localStorage.removeItem(this.id);
+        var items = [];
+        for (var key in window.localStorage){
+          items.push(key);
+        }
+        items = items.slice(0, items.length - 6);
+        $('#cart-item').text('My Cart (' + items.length + ')');
+        var getCurrentTotal = parseInt($('#total-amount').text().replace('$', ''));
+        var totalValue = getCurrentTotal - parseInt(tempData[4].replace('$', ''));
+        if(totalValue === 20){
+          $('#del-charges').text('0$');
+          $('#total-amount').text('0$');
+        }
+        else{
+          $('#total-amount').text(totalValue + '$');
+        }
+        $('#div-' + this.id).remove();
+      });
+      $('#cont-shop').click(function(){
+        window.location.href = "/products/579c49f0fe6350782dc20c10";
+      });
+    });
+  </script>
+</footer>
